@@ -1,11 +1,13 @@
-package com.dev.notes;
+package com.dev.notes.activities;
 
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.dev.notes.model.Note;
+import com.dev.notes.model.db.HelperFactory;
+import com.dev.notes.R;
+import com.dev.notes.model.pojo.Note;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +21,7 @@ public class NotesActivity extends BaseActivity {
         List<Note> notes = new ArrayList<Note>();
         populateNotes(notes);
 
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(notes, this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
@@ -34,15 +36,17 @@ public class NotesActivity extends BaseActivity {
         return R.layout.activity_main;
     }
 
-    private void populateNotes(List<Note> notes){
-        for (int i = 0; i<50; i++){
+    private void populateNotes(List<Note> notes) {
+        for (Long i = 0L; i < 10L; i++) {
             Note note = new Note();
+            note.setId(i);
             note.setTitle("Item №" + i);
             note.setContent("awdawdawdawdfgfgbfawdawdawdawdfgfgbfawdawdawd" +
-                    "awdfgfgbfawdawdawdawdfgfgbfawdawdawdawdfgfgbfawdawdawdawdfgfgbf");
+                    "awdfgfgbfawdawdawdawdfgfgbfaw");
             note.setDate(new Date());
-            note.setType(Note.Type.values()[i%3]);
-            notes.add(note);
+            HelperFactory.getHelper().getNoteDao().create(note);
         }
+        List<Note> allNotes = HelperFactory.getHelper().getNoteDao().getAllNotes();
+        notes.addAll(allNotes);
     }
 }

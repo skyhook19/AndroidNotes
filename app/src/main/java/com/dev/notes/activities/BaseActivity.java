@@ -1,6 +1,5 @@
-package com.dev.notes;
+package com.dev.notes.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,11 +13,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.dev.notes.model.db.HelperFactory;
+import com.dev.notes.R;
+
 
 public abstract class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        HelperFactory.setHelper(getApplicationContext());
 //        setContentView(R.layout.activity_main);
         setContentView(getContentViewId());
 

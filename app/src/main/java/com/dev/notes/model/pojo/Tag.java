@@ -1,4 +1,4 @@
-package com.dev.notes.model;
+package com.dev.notes.model.pojo;
 
 
 public class Tag {

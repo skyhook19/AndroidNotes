@@ -1,8 +1,10 @@
-package com.dev.notes;
+package com.dev.notes.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
+
+import com.dev.notes.R;
 
 public class NoteActivity extends BaseActivity {
 

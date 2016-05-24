@@ -1,18 +1,27 @@
-package com.dev.notes.model;
+package com.dev.notes.model.pojo;
+
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+@DatabaseTable(tableName = "goals")
 public class Note {
 
-    public enum Type {RED, GREEN, YELLOW}
+    @DatabaseField(generatedId = true)
+    private Long id;
 
+    @DatabaseField
     private String content;
+
+    @DatabaseField
     private String title;
+
+    @DatabaseField
     private Date date;
-    private Type type;
+
     private List<Tag> tags = new ArrayList<Tag>();
 
     public String getContent() {
@@ -31,14 +40,6 @@ public class Note {
         this.date = date;
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
     public List<Tag> getTags() {
         return tags;
     }
@@ -49,6 +50,14 @@ public class Note {
 
     public String getTitle() {
         return title;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setTitle(String title) {
