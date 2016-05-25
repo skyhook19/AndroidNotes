@@ -9,7 +9,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
 import java.util.List;
 
-public class NoteDao extends BaseDaoImpl<Note, Integer> {
+public class NoteDao extends BaseDaoImpl<Note, Long> {
 
     public NoteDao(ConnectionSource connectionSource, Class<Note> dataClass) throws SQLException {
         super(connectionSource, dataClass);
@@ -23,11 +23,24 @@ public class NoteDao extends BaseDaoImpl<Note, Integer> {
         }
     }
 
-    public Note getNoteById(Long id) throws SQLException {
-        QueryBuilder<Note, Integer> queryBuilder = queryBuilder();
-        queryBuilder.where().eq("id", id);
-        PreparedQuery<Note> preparedQuery = queryBuilder.prepare();
-        return queryForFirst(preparedQuery);
+    public Note getNoteById(Long id) {
+        try {
+            QueryBuilder<Note, Long> queryBuilder = queryBuilder();
+            queryBuilder.where().eq(Note.ID_FIELD_NAME, id);
+            PreparedQuery<Note> preparedQuery = queryBuilder.prepare();
+            return queryForFirst(preparedQuery);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int deleteById(Long id) {
+        try {
+            return super.deleteById(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -43,6 +56,15 @@ public class NoteDao extends BaseDaoImpl<Note, Integer> {
     public int delete(Note data) {
         try {
             return super.delete(data);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int update(Note data) {
+        try {
+            return super.update(data);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

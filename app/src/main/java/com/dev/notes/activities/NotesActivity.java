@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.dev.notes.model.db.HelperFactory;
 import com.dev.notes.R;
@@ -18,6 +19,21 @@ public class NotesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        refreshNotes();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshNotes();
+    }
+
+    @Override
+    protected int getContentViewId() {
+        return R.layout.activity_main;
+    }
+
+    private void refreshNotes() {
         List<Note> notes = new ArrayList<Note>();
         populateNotes(notes);
 
@@ -31,22 +47,7 @@ public class NotesActivity extends BaseActivity {
         recyclerView.setItemAnimator(itemAnimator);
     }
 
-    @Override
-    protected int getContentViewId() {
-        return R.layout.activity_main;
-    }
-
     private void populateNotes(List<Note> notes) {
-        for (Long i = 0L; i < 10L; i++) {
-            Note note = new Note();
-            note.setId(i);
-            note.setTitle("Item №" + i);
-            note.setContent("awdawdawdawdfgfgbfawdawdawdawdfgfgbfawdawdawd" +
-                    "awdfgfgbfawdawdawdawdfgfgbfaw");
-            note.setDate(new Date());
-            HelperFactory.getHelper().getNoteDao().create(note);
-        }
-        List<Note> allNotes = HelperFactory.getHelper().getNoteDao().getAllNotes();
-        notes.addAll(allNotes);
+        notes.addAll(HelperFactory.getHelper().getNoteDao().getAllNotes());
     }
 }

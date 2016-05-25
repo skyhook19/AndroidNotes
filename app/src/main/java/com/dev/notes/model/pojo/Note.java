@@ -3,14 +3,15 @@ package com.dev.notes.model.pojo;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
-@DatabaseTable(tableName = "goals")
-public class Note {
+@DatabaseTable(tableName = "notes")
+public class Note implements Serializable {
 
-    @DatabaseField(generatedId = true)
+    public final static String ID_FIELD_NAME = "id";
+
+    @DatabaseField(generatedId = true, columnName = ID_FIELD_NAME)
     private Long id;
 
     @DatabaseField
@@ -21,8 +22,6 @@ public class Note {
 
     @DatabaseField
     private Date date;
-
-    private List<Tag> tags = new ArrayList<Tag>();
 
     public String getContent() {
         return content;
@@ -40,14 +39,6 @@ public class Note {
         this.date = date;
     }
 
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -63,4 +54,5 @@ public class Note {
     public void setTitle(String title) {
         this.title = title;
     }
+
 }

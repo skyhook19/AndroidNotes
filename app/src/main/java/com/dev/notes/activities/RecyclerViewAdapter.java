@@ -31,16 +31,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      */
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_item, viewGroup, false);
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, NoteActivity.class);
-                intent.putExtra("noteTitle", "my bad");
-                activity.startActivity(intent);
-            }
-        });
-        return new ViewHolder(v);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_item, viewGroup, false);
+        return new ViewHolder(view);
     }
 
     /**
@@ -49,14 +41,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         Note note = notes.get(i);
+        viewHolder.id = note.getId();
         viewHolder.title.setText(note.getTitle());
         viewHolder.date.setText(note.getDate().toString());
-        viewHolder.deleteButtonListener.setRecord(note);
+        viewHolder.deleteButtonListener.setNote(note);
+        viewHolder.onClickItemListener.setNote(note);
     }
 
     @Override
     public int getItemCount() {
         return notes.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private Long id;
+        private TextView title;
+        private TextView date;
+        private Button deleteButton;
+        private DeleteButtonListener deleteButtonListener;
+        private OnClickItemListener onClickItemListener;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            title = (TextView) itemView.findViewById(R.id.note_title);
+            onClickItemListener = new OnClickItemListener();
+            title.setOnClickListener(onClickItemListener);
+            date = (TextView) itemView.findViewById(R.id.note_date);
+            date.setOnClickListener(onClickItemListener);
+            deleteButton = (Button) itemView.findViewById(R.id.recyclerViewItemDeleteButton);
+            deleteButtonListener = new DeleteButtonListener();
+            deleteButton.setOnClickListener(deleteButtonListener);
+        }
     }
 
     private void delete(Note note) {
@@ -66,19 +81,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyItemRemoved(position);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView date;
-        private Button deleteButton;
-        private DeleteButtonListener deleteButtonListener;
+    private void itemClicked(Note note) {
+        Intent intent = new Intent(activity, NoteActivity.class);
+        intent.putExtra("note", note);
+        activity.startActivity(intent);
+    }
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            title = (TextView) itemView.findViewById(R.id.note_title);
-            date = (TextView) itemView.findViewById(R.id.note_date);
-            deleteButton = (Button) itemView.findViewById(R.id.recyclerViewItemDeleteButton);
-            deleteButtonListener = new DeleteButtonListener();
-            deleteButton.setOnClickListener(deleteButtonListener);
+    private class OnClickItemListener implements View.OnClickListener {
+        private Note note;
+
+        @Override
+        public void onClick(View v) {
+            itemClicked(note);
+        }
+
+        public void setNote(Note note) {
+            this.note = note;
         }
     }
 
@@ -90,7 +108,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             delete(note);
         }
 
-        public void setRecord(Note note) {
+        public void setNote(Note note) {
             this.note = note;
         }
     }

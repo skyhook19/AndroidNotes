@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.dev.notes.R;
+import com.dev.notes.model.pojo.Note;
 
 public class NoteActivity extends BaseActivity {
 
@@ -13,9 +14,13 @@ public class NoteActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String title = extras.getString("noteTitle");
+            Note note = (Note) extras.getSerializable("note");
+
             TextView textView = (TextView) findViewById(R.id.noteTitleTV);
-            textView.setText(title);
+            textView.setText(note.getTitle());
+
+            TextView textView2 = (TextView) findViewById(R.id.noteContentTV);
+            textView2.setText(note.getContent());
         }
     }
 
