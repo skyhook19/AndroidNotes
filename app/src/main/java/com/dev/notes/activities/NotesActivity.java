@@ -33,6 +33,11 @@ public class NotesActivity extends BaseActivity {
         return R.layout.activity_main;
     }
 
+    @Override
+    protected int getNavDrawerId() {
+        return R.id.drawer_notes;
+    }
+
     private void refreshNotes() {
         List<Note> notes = new ArrayList<Note>();
         populateNotes(notes);
@@ -49,5 +54,10 @@ public class NotesActivity extends BaseActivity {
 
     private void populateNotes(List<Note> notes) {
         notes.addAll(HelperFactory.getHelper().getNoteDao().getAllNotes());
+    }
+
+    @Override
+    protected int getNavId() {
+        return R.id.nav_view_notes;
     }
 }

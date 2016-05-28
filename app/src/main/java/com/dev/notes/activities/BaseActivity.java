@@ -28,12 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 //        setContentView(R.layout.activity_main);
         setContentView(getContentViewId());
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        LayoutInflater layoutInflater = (LayoutInflater)
-//                this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        drawer.addView(layoutInflater.inflate(getContentViewId(), drawer, false) );
-
+        DrawerLayout drawer = (DrawerLayout) findViewById(getNavDrawerId());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,11 +39,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(getNavId());
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     protected abstract int getContentViewId();
+    protected abstract int getNavDrawerId();
+    protected abstract int getNavId();
 
     protected void initFloatButton() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -64,9 +61,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         startActivity(intent);
     }
 
+    private void forwardToAddSpeechActivity() {
+        Intent intent = new Intent(this, SpeechActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(getNavDrawerId());
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -96,10 +98,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         int id = item.getItemId();
 
         if (id == R.id.nav_notes) {
+
         } else if (id == R.id.nav_tags) {
+
+        } else if (id == R.id.nav_speech) {
+            forwardToAddSpeechActivity();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(getNavDrawerId());
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

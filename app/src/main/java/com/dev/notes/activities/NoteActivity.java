@@ -28,4 +28,14 @@ public class NoteActivity extends BaseActivity {
     protected int getContentViewId() {
         return R.layout.activity_note;
     }
+
+    @Override
+    protected int getNavDrawerId() {
+        return R.id.drawer_note;
+    }
+
+    @Override
+    protected int getNavId() {
+        return R.id.nav_view_note;
+    }
 }

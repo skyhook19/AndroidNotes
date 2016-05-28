@@ -54,4 +54,14 @@ public class AddNoteActivity extends BaseActivity {
     protected void initFloatButton() {
         //NOP
     }
+
+    @Override
+    protected int getNavDrawerId() {
+        return R.id.drawer_addnote;
+    }
+
+    @Override
+    protected int getNavId() {
+        return R.id.nav_view_addnote;
+    }
 }
