@@ -6,9 +6,9 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Notes" />
         <item
-            android:id="@+id/nav_tags"
+            android:id="@+id/nav_maps"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Tags" />
+            android:title="Map" />
         <item
             android:id="@+id/nav_speech"
             android:icon="@drawable/ic_menu_gallery"

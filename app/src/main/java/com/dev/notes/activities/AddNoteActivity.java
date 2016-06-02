@@ -9,15 +9,24 @@ import android.widget.TextView;
 import com.dev.notes.R;
 import com.dev.notes.model.db.HelperFactory;
 import com.dev.notes.model.pojo.Note;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
 
 public class AddNoteActivity extends BaseActivity {
 
+    private LatLng coord;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initAddNoteButton();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            LatLng coord = extras.getParcelable("coord");
+            this.coord = coord;
+        }
     }
 
     private void initAddNoteButton() {
@@ -36,6 +45,8 @@ public class AddNoteActivity extends BaseActivity {
         note.setTitle(title);
         note.setContent(content);
         note.setDate(new Date());
+        note.setLatitude(coord.latitude);
+        note.setLongitude(coord.longitude);
         HelperFactory.getHelper().getNoteDao().create(note);
     }
 

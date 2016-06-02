@@ -66,6 +66,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         startActivity(intent);
     }
 
+    private void forwardToMapActivity() {
+        Intent intent = new Intent(this, MapActivity.class);
+        startActivity(intent);
+    }
+
+    private void forwardToNotesActivity() {
+        Intent intent = new Intent(this, NotesActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(getNavDrawerId());
@@ -98,9 +108,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         int id = item.getItemId();
 
         if (id == R.id.nav_notes) {
-
-        } else if (id == R.id.nav_tags) {
-
+            forwardToNotesActivity();
+        } else if (id == R.id.nav_maps) {
+            forwardToMapActivity();
         } else if (id == R.id.nav_speech) {
             forwardToAddSpeechActivity();
         }

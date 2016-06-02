@@ -8,7 +8,6 @@ import java.util.Date;
 
 @DatabaseTable(tableName = "notes")
 public class Note implements Serializable {
-
     public final static String ID_FIELD_NAME = "id";
 
     @DatabaseField(generatedId = true, columnName = ID_FIELD_NAME)
@@ -22,6 +21,12 @@ public class Note implements Serializable {
 
     @DatabaseField
     private Date date;
+
+    @DatabaseField
+    private Double latitude;
+
+    @DatabaseField
+    private Double longitude;
 
     public String getContent() {
         return content;
@@ -55,4 +60,19 @@ public class Note implements Serializable {
         this.title = title;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 }
