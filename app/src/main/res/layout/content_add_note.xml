@@ -25,9 +25,25 @@
         android:hint="Note Content"
         android:layout_below="@+id/addNoteTitle"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addNoteContent"
+        android:text="Tags: "
+        android:id="@+id/tagsTV"/>
+
+    <ListView
+        android:id="@+id/tagsLV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tagsTV"
+        android:choiceMode="multipleChoice" >
+    </ListView>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tagsLV"
         android:text="Add Note"
         android:id="@+id/addNoteButton"
         android:layout_alignParentBottom="true"
