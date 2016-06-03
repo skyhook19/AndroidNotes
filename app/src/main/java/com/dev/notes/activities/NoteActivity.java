@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.dev.notes.R;
 import com.dev.notes.model.pojo.Note;
-
 public class NoteActivity extends BaseActivity {
 
     @Override

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -40,7 +39,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_map);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        initFloatButton();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -60,7 +58,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setOnMapClickListener((l) -> {
+        mMap.setOnMapLongClickListener((l) -> {
             mMap.addMarker(new MarkerOptions().position(l).title("Added marker"));
             forwardToAddNoteActivity(l);
         });
@@ -73,31 +71,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 mMap.addMarker(new MarkerOptions().position(coord).title(note.getTitle()));
             }
         }
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         mMap.setMyLocationEnabled(true);
-    }
-
-    protected void initFloatButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            forwardToAddNoteActivity();
-        });
-    }
-
-    private void forwardToAddNoteActivity() {
-        Intent intent = new Intent(this, AddNoteActivity.class);
-        startActivity(intent);
     }
 
     private void forwardToAddNoteActivity(LatLng coord) {
@@ -132,11 +110,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             forwardToMapActivity();
         } else if (id == R.id.nav_speech) {
             forwardToAddSpeechActivity();
+        } else if (id == R.id.nav_tags) {
+            forwardToTagsActivity();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_map);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void forwardToTagsActivity() {
+        Intent intent = new Intent(this, TagsActivity.class);
+        startActivity(intent);
     }
 
     @Override

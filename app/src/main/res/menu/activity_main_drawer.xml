@@ -6,6 +6,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Notes" />
         <item
+            android:id="@+id/nav_tags"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Tags" />
+        <item
             android:id="@+id/nav_maps"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Map" />
