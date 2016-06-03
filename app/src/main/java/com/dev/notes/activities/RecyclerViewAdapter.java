@@ -12,7 +12,9 @@ import android.widget.TextView;
 import com.dev.notes.model.db.HelperFactory;
 import com.dev.notes.R;
 import com.dev.notes.model.pojo.Note;
+import com.dev.notes.model.pojo.NoteTags;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -77,6 +79,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private void delete(Note note) {
         int position = notes.indexOf(note);
         notes.remove(position);
+
+        List<Long> forRemove = new ArrayList<>();
+        List<NoteTags> allNoteTags = HelperFactory.getHelper().getNoteTagsDao().getAllNoteTags();
+
+        for (NoteTags noteTags: allNoteTags) {
+            if (noteTags.getNote().getId().equals(note.getId())) {
+                forRemove.add(noteTags.getTag().getId());
+            }
+        }
+
+        for (Long id: forRemove) {
+            HelperFactory.getHelper().getNoteTagsDao().deleteById(id);
+        }
+
         HelperFactory.getHelper().getNoteDao().delete(note);
         notifyItemRemoved(position);
     }

@@ -41,6 +41,7 @@ public class TagRecyclerViewAdapter extends RecyclerView.Adapter<TagRecyclerView
         Tag tag = tags.get(i);
         viewHolder.id = tag.getId();
         viewHolder.name.setText(tag.getName());
+        viewHolder.deleteButtonListener.setTag(tag);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class TagRecyclerViewAdapter extends RecyclerView.Adapter<TagRecyclerView
             delete(tag);
         }
 
-        public void setNote(Tag tag) {
+        public void setTag(Tag tag) {
             this.tag = tag;
         }
     }

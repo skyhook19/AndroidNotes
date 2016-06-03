@@ -50,7 +50,8 @@
         android:id="@+id/noteTags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/noteTagsTV" >
+        android:layout_below="@+id/noteTagsTV"
+        android:choiceMode="none">
     </ListView>
 
 </RelativeLayout>

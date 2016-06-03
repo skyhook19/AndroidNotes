@@ -69,17 +69,19 @@ public class AddNoteActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == COORD_REQUEST) {
-            LatLng latLng = data.getParcelableExtra("coord");
-            this.coord = latLng;
-            Geocoder gcd = new Geocoder(this, Locale.getDefault());
-            List<android.location.Address> addresses = null;
-            try {
-                addresses = gcd.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                if (addresses.size() > 0) {
-                    ((Button) findViewById(R.id.attachLocationBtn)).setText(addresses.get(0).getLocality());
+            if (resultCode == 7) {
+                LatLng latLng = data.getParcelableExtra("coord");
+                this.coord = latLng;
+                Geocoder gcd = new Geocoder(this, Locale.getDefault());
+                List<android.location.Address> addresses = null;
+                try {
+                    addresses = gcd.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                    if (addresses.size() > 0) {
+                        ((Button) findViewById(R.id.attachLocationBtn)).setText(addresses.get(0).getLocality());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
