@@ -1,8 +1,12 @@
 package com.dev.notes.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -59,13 +64,15 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMapLongClickListener((l) -> {
-            mMap.addMarker(new MarkerOptions().position(l).title("Added marker"));
-            forwardToAddNoteActivity(l);
+            Intent intentMessage = new Intent();
+            intentMessage.putExtra("coord", l);
+            setResult(1, intentMessage);
+            finish();
         });
 
         List<Note> allNotes = HelperFactory.getHelper().getNoteDao().getAllNotes();
 
-        for(Note note: allNotes) {
+        for (Note note : allNotes) {
             if (note.getLatitude() != null && note.getLongitude() != null) {
                 LatLng coord = new LatLng(note.getLatitude(), note.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(coord).title(note.getTitle()));
@@ -76,6 +83,23 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             return;
         }
         mMap.setMyLocationEnabled(true);
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        if (location != null) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(location.getLatitude(), location.getLongitude()), 13));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                    .zoom(17)                   // Sets the zoom
+                    .bearing(90)                // Sets the orientation of the camera to east
+                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
     }
 
     private void forwardToAddNoteActivity(LatLng coord) {

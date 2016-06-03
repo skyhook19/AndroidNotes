@@ -62,7 +62,7 @@ public class SpeechActivity extends BaseActivity {
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     Note note = new Note();
                     note.setContent(result.get(0));
-                    note.setTitle("Voice generated note");
+                    note.setTitle("Voice note " + new Date());
                     note.setDate(new Date());
                     HelperFactory.getHelper().getNoteDao().create(note);
                     forwardToNotesActivity();

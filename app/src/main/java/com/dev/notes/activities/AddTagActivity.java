@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dev.notes.R;
 import com.dev.notes.model.db.HelperFactory;
@@ -22,6 +23,12 @@ public class AddTagActivity extends BaseActivity {
         Button button = (Button) findViewById(R.id.addTagButton);
         button.setOnClickListener((v) -> {
             String name = ((TextView) findViewById(R.id.addTagName)).getText().toString();
+
+            if (name.trim().isEmpty()) {
+                Toast.makeText(this, "Tag name is empty:(", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             addTag(name);
             forwardToTagsActivity();
         });

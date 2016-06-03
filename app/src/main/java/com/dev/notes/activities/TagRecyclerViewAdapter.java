@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.dev.notes.R;
 import com.dev.notes.model.db.HelperFactory;
+import com.dev.notes.model.pojo.NoteTags;
 import com.dev.notes.model.pojo.Tag;
 
 import java.util.List;
@@ -63,6 +64,11 @@ public class TagRecyclerViewAdapter extends RecyclerView.Adapter<TagRecyclerView
     }
 
     private void delete(Tag tag) {
+        List<NoteTags> allNoteTags = HelperFactory.getHelper().getNoteTagsDao().getAllNoteTags();
+        for(NoteTags noteTags: allNoteTags) {
+            if (noteTags.getTag().getId().equals(tag.getId())) return;
+        }
+
         int position = tags.indexOf(tag);
         tags.remove(position);
         HelperFactory.getHelper().getTagDao().delete(tag);

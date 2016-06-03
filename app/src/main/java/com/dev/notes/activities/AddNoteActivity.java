@@ -1,8 +1,10 @@
 package com.dev.notes.activities;
 
 import android.content.Intent;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,21 +12,26 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dev.notes.R;
 import com.dev.notes.model.db.HelperFactory;
 import com.dev.notes.model.pojo.Note;
 import com.dev.notes.model.pojo.NoteTags;
 import com.dev.notes.model.pojo.Tag;
+import com.google.android.gms.identity.intents.Address;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AddNoteActivity extends BaseActivity {
 
     private LatLng coord;
+    private static final int COORD_REQUEST = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +53,10 @@ public class AddNoteActivity extends BaseActivity {
         choiceList.setAdapter(adapter);
 
 
+        ((Button) findViewById(R.id.attachLocationBtn)).setOnClickListener(v -> {
+            Intent intent = new Intent(this, MapActivity.class);
+            startActivityForResult(intent, COORD_REQUEST);
+        });
 
 
         Bundle extras = getIntent().getExtras();
@@ -55,12 +66,34 @@ public class AddNoteActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == COORD_REQUEST) {
+            LatLng latLng = data.getParcelableExtra("coord");
+            this.coord = latLng;
+            Geocoder gcd = new Geocoder(this, Locale.getDefault());
+            List<android.location.Address> addresses = null;
+            try {
+                addresses = gcd.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                if (addresses.size() > 0) {
+                    ((Button) findViewById(R.id.attachLocationBtn)).setText(addresses.get(0).getLocality());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void initAddNoteButton() {
         Button button = (Button) findViewById(R.id.addNoteButton);
         button.setOnClickListener((v) -> {
             String title = ((TextView) findViewById(R.id.addNoteTitle)).getText().toString();
             String content = ((TextView) findViewById(R.id.addNoteContent)).getText().toString();
 
+            if (title.trim().isEmpty() || content.trim().isEmpty()) {
+                Toast.makeText(this, "Title or content is empty:(", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             List<Tag> allTags = HelperFactory.getHelper().getTagDao().getAllTags();
 
@@ -93,7 +126,7 @@ public class AddNoteActivity extends BaseActivity {
         }
         HelperFactory.getHelper().getNoteDao().create(note);
 
-        for(String tagName: selectedTags) {
+        for (String tagName : selectedTags) {
             Tag tag = HelperFactory.getHelper().getTagDao().getTagByName(tagName);
 
             NoteTags noteTag = new NoteTags();

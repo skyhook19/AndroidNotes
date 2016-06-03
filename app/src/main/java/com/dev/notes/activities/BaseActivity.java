@@ -59,6 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     private void forwardToAddNoteActivity() {
         Intent intent = new Intent(this, AddNoteActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void forwardToAddSpeechActivity() {
@@ -79,6 +80,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     private void forwardToTagsActivity() {
         Intent intent = new Intent(this, TagsActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

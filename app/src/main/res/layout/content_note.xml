@@ -15,15 +15,29 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/noteTitleLabel"
+        android:text="Note Title: "/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/noteTitleTV"
+        android:layout_below="@+id/noteTitleLabel"
         android:text=""/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/noteContentLabel"
+        android:layout_below="@+id/noteTitleTV"
+        android:text="Note Content: "/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/noteContentTV"
         android:text=""
-        android:layout_below="@+id/noteTitleTV"/>
+        android:layout_below="@+id/noteContentLabel"/>
 
     <TextView
         android:layout_width="wrap_content"
