@@ -3,62 +3,118 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.AddNoteActivity"
     tools:showIn="@layout/app_bar_add_note">
 
-    <EditText
+
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/addNoteTitle"
-        android:hint="Note Title" />
+        android:layout_alignParentTop="true"
+        android:id="@+id/linearLayout"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_above="@+id/linearLayout2">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/addNoteContent"
-        android:hint="Note Content"
-        android:layout_below="@+id/addNoteTitle"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/addNoteTitle"
+            android:hint="Note Title" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/addNoteContent"
-        android:text="Location: "
-        android:id="@+id/locationTV"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/addNoteContent"
+            android:hint="Note Content"
+            android:layout_below="@+id/addNoteTitle"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/locationTV"
-        android:text="Add Location"
-        android:id="@+id/attachLocationBtn"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/attachLocationBtn"
-        android:text="Tags: "
-        android:id="@+id/tagsTV"/>
 
-    <ListView
-        android:id="@+id/tagsLV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tagsTV"
-        android:choiceMode="multipleChoice" >
-    </ListView>
+        <ListView
+            android:id="@+id/tagsLV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tagsTV"
+            android:choiceMode="multipleChoice" >
+        </ListView>
+    </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tagsLV"
-        android:text="Add Note"
-        android:id="@+id/addNoteButton" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:paddingTop="10dp"
+        android:showDividers="none"
+        android:elevation="12dp"
+        android:id="@+id/linearLayout2"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:focusable="false"
+        android:background="@color/background_material_light">
+
+
+
+
+        <ImageButton
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/attachLocationBtn"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_add_location_black_24dp"
+            android:padding="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="30dp" />
+
+        <ImageButton
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addNoteButton"
+            android:layout_below="@+id/attachLocationBtn"
+            android:layout_toRightOf="@+id/attachLocationBtn"
+            android:layout_toEndOf="@+id/attachLocationBtn"
+            android:background="@drawable/ic_done_black_24dp"
+            android:padding="0dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp" />
+
+<!--
+        <ImageButton
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_bookmark_black_24dp"
+            android:id="@+id/attachTagsButton"
+            android:layout_below="@+id/attachLocationBtn"
+            android:layout_toRightOf="@+id/attachLocationBtn"
+            android:layout_toEndOf="@+id/attachLocationBtn"
+            android:background="@color/background_material_light" />-->
+
+        <ImageButton
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/attachAlarmButton"
+            android:layout_below="@+id/attachTagsButton"
+            android:layout_toRightOf="@+id/attachLocationBtn"
+            android:layout_toEndOf="@+id/attachLocationBtn"
+            android:background="@drawable/ic_alarm_black_24dp"
+            android:padding="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="0dp" />
+    </LinearLayout>
+
 
 </RelativeLayout>

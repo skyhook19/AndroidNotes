@@ -12,45 +12,28 @@
     tools:context=".activities.NoteActivity"
     tools:showIn="@layout/app_bar_note">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/noteTitleLabel"
-        android:text="Note Title: "/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="35dp"
         android:id="@+id/noteTitleTV"
-        android:layout_below="@+id/noteTitleLabel"
         android:text=""/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/noteContentLabel"
-        android:layout_below="@+id/noteTitleTV"
-        android:text="Note Content: "/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:textSize="20dp"
         android:id="@+id/noteContentTV"
         android:text=""
-        android:layout_below="@+id/noteContentLabel"/>
+        android:layout_below="@+id/noteTitleTV"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/noteContentTV"
-        android:text="Tags: "
-        android:id="@+id/noteTagsTV"/>
 
     <ListView
         android:id="@+id/noteTags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/noteTagsTV"
+        android:layout_below="@+id/noteContentTV"
         android:choiceMode="none">
     </ListView>
 

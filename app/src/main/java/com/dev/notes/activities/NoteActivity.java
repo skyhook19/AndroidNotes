@@ -1,5 +1,6 @@
 package com.dev.notes.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ArrayAdapter;
@@ -26,9 +27,15 @@ public class NoteActivity extends BaseActivity {
 
             TextView textView = (TextView) findViewById(R.id.noteTitleTV);
             textView.setText(note.getTitle());
+            textView.setOnClickListener(v -> {
+                itemClicked(note);
+            });
 
             TextView textView2 = (TextView) findViewById(R.id.noteContentTV);
             textView2.setText(note.getContent());
+            textView2.setOnClickListener(v -> {
+                itemClicked(note);
+            });
 
             List<Tag> tags = new ArrayList<>();
             List<NoteTags> allNoteTags = HelperFactory.getHelper().getNoteTagsDao().getAllNoteTags();
@@ -47,6 +54,12 @@ public class NoteActivity extends BaseActivity {
                     android.R.layout.simple_list_item_multiple_choice, tagNames);
             ((ListView) findViewById(R.id.noteTags)).setAdapter(adapter);
         }
+    }
+
+    private void itemClicked(Note note) {
+        Intent intent = new Intent(this, AddNoteActivity.class);
+        intent.putExtra("note", note);
+        this.startActivity(intent);
     }
 
     @Override

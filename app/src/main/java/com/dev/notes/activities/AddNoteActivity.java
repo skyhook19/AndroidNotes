@@ -2,6 +2,7 @@ package com.dev.notes.activities;
 
 import android.content.Intent;
 import android.location.Geocoder;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,12 +34,13 @@ public class AddNoteActivity extends BaseActivity {
 
     private LatLng coord;
     private static final int COORD_REQUEST = 1;
+    private boolean isItemEditing = false;
+    private Note note;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initAddNoteButton();
-
 
         ListView choiceList = (ListView) findViewById(R.id.tagsLV);
 
@@ -52,14 +55,23 @@ public class AddNoteActivity extends BaseActivity {
                 android.R.layout.simple_list_item_multiple_choice, tags);
         choiceList.setAdapter(adapter);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            isItemEditing = true;
+            note = (Note) extras.getSerializable("note");
+            ((TextView) findViewById(R.id.addNoteTitle)).setText(note.getTitle());
+            ((TextView) findViewById(R.id.addNoteContent)).setText(note.getContent());
+        }
+        else note = new Note();
 
-        ((Button) findViewById(R.id.attachLocationBtn)).setOnClickListener(v -> {
+
+        ((ImageButton) findViewById(R.id.attachLocationBtn)).setOnClickListener(v -> {
             Intent intent = new Intent(this, MapActivity.class);
             startActivityForResult(intent, COORD_REQUEST);
         });
 
 
-        Bundle extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
         if (extras != null) {
             LatLng coord = extras.getParcelable("coord");
             this.coord = coord;
@@ -77,7 +89,7 @@ public class AddNoteActivity extends BaseActivity {
                 try {
                     addresses = gcd.getFromLocation(latLng.latitude, latLng.longitude, 1);
                     if (addresses.size() > 0) {
-                        ((Button) findViewById(R.id.attachLocationBtn)).setText(addresses.get(0).getLocality());
+                        //((ImageButton) findViewById(R.id.attachLocationBtn)).setText(addresses.get(0).getLocality());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -87,7 +99,7 @@ public class AddNoteActivity extends BaseActivity {
     }
 
     private void initAddNoteButton() {
-        Button button = (Button) findViewById(R.id.addNoteButton);
+        ImageButton button = (ImageButton) findViewById(R.id.addNoteButton);
         button.setOnClickListener((v) -> {
             String title = ((TextView) findViewById(R.id.addNoteTitle)).getText().toString();
             String content = ((TextView) findViewById(R.id.addNoteContent)).getText().toString();
@@ -113,30 +125,55 @@ public class AddNoteActivity extends BaseActivity {
             }
 
             addNote(title, content, selected);
+            note = null;
+            isItemEditing = false;
             forwardToNotesActivity();
         });
     }
 
     private void addNote(String title, String content, List<String> selectedTags) {
-        Note note = new Note();
         note.setTitle(title);
         note.setContent(content);
-        note.setDate(new Date());
         if (coord != null) {
             note.setLatitude(coord.latitude);
             note.setLongitude(coord.longitude);
         }
-        HelperFactory.getHelper().getNoteDao().create(note);
 
-        for (String tagName : selectedTags) {
-            Tag tag = HelperFactory.getHelper().getTagDao().getTagByName(tagName);
+        if(!isItemEditing) {
+            note.setDate(new Date());
+            HelperFactory.getHelper().getNoteDao().create(note);
+            for (String tagName : selectedTags) {
+                Tag tag = HelperFactory.getHelper().getTagDao().getTagByName(tagName);
 
-            NoteTags noteTag = new NoteTags();
-            noteTag.setTag(tag);
-            noteTag.setNote(note);
-            HelperFactory.getHelper().getNoteTagsDao().create(noteTag);
+                NoteTags noteTag = new NoteTags();
+                noteTag.setTag(tag);
+                noteTag.setNote(note);
+                HelperFactory.getHelper().getNoteTagsDao().create(noteTag);
+            }
+        }
+        else {
+            HelperFactory.getHelper().getNoteDao().update(note);
+            for (String tagName : selectedTags) {
+                Tag tag = HelperFactory.getHelper().getTagDao().getTagByName(tagName);
+                boolean hasTags = false;
+                for(NoteTags noteTag : HelperFactory.getHelper().getNoteTagsDao().getAllNoteTags()){
+                    if(noteTag.getNote() == note) {
+                        noteTag.setTag(tag);
+                        HelperFactory.getHelper().getNoteTagsDao().update(noteTag);
+                        hasTags = true;
+                    }
+                }
+
+                if(!hasTags){
+                    NoteTags noteTag = new NoteTags();
+                    noteTag.setTag(tag);
+                    noteTag.setNote(note);
+                    HelperFactory.getHelper().getNoteTagsDao().create(noteTag);
+                }
+            }
         }
     }
+
 
     private void forwardToNotesActivity() {
         Intent intent = new Intent(this, NotesActivity.class);
